@@ -1,8 +1,8 @@
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
-const knex = require("knex");
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+import knex from "knex";
 
-exports.register = async (req, res) => {
+exports.register = async (req: any, res: any) => {
   const { email, password } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -13,7 +13,7 @@ exports.register = async (req, res) => {
   }
 };
 
-exports.login = async (req, res) => {
+exports.login = async (req: any, res: any) => {
   const { email, password } = req.body;
   try {
     const user = await knex("users").where({ email }).first();
@@ -24,9 +24,12 @@ exports.login = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ error: "Invalid crede credentials" });
     }
+    if (!process.env.JWT_SECRET) {
+      throw new Error("JWT_SECRET is not defined in environment variables");
+    }
     const token = jwt.sign(
       { id: user.id, email: user.email },
-      process.env.jwt_secret,
+      process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
     res.json({ token });

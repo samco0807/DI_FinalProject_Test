@@ -1,19 +1,19 @@
 // backend/src/models/userModel.ts
-import knex from "../db/knexfile";
-import { User } from "./User";
+import db from "../db/knex";
+import { User } from "./User.ts";
 
 export const getUserByEmail = async (
   email: string
 ): Promise<User | undefined> => {
-  return knex<User>("users").where({ email }).first();
+  return db<User>("users").where({ email }).first();
 };
 
 export const getUserById = async (id: number): Promise<User | undefined> => {
-  return knex<User>("users").where({ id }).first();
+  return db<User>("users").where({ id }).first();
 };
 
 export const createUser = async (user: Partial<User>): Promise<User> => {
-  const [newUser] = await knex<User>("users").insert(user).returning("*");
+  const [newUser] = await db<User>("users").insert(user).returning("*");
   return newUser;
 };
 

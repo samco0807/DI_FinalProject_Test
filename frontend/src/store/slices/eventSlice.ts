@@ -2,6 +2,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+// Typescript
 interface Event {
   id: number;
   title: string;
@@ -21,14 +22,15 @@ interface EventState {
   error: string | null;
 }
 
+// State initialization
 const initialState: EventState = {
   events: [],
   loading: false,
   error: null,
 };
 
-// Thunk pour récupérer tous les événements
-export const fetchEvents = createAsyncThunk(
+// Thunk to catch all the events
+export const fetchEventsThunk = createAsyncThunk(
   'events/fetchEvents',
   async (_, thunkAPI) => {
     try {
@@ -40,7 +42,7 @@ export const fetchEvents = createAsyncThunk(
   }
 );
 
-// Thunk pour créer un événement
+// Thunk to create an event
 export const createEventThunk = createAsyncThunk(
   'events/createEvent',
   async (eventData: Partial<Event>, thunkAPI) => {
@@ -65,15 +67,15 @@ const eventSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // Fetch Events
-      .addCase(fetchEvents.pending, (state) => {
+      .addCase(fetchEventsThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchEvents.fulfilled, (state, action: PayloadAction<Event[]>) => {
+      .addCase(fetchEventsThunk.fulfilled, (state, action: PayloadAction<Event[]>) => {
         state.loading = false;
         state.events = action.payload;
       })
-      .addCase(fetchEvents.rejected, (state, action) => {
+      .addCase(fetchEventsThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })

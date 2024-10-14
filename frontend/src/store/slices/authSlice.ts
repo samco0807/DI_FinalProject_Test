@@ -2,6 +2,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+// Typescript
 interface AuthState {
   token: string | null;
   loading: boolean;
@@ -22,12 +23,12 @@ export const registerUser = createAsyncThunk(
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/register`, userData);
       return response.data.token;
     } catch (error: any) {
-      return thunkAPI.rejectWithValue(error.response.data.message || 'Erreur lors de l\'inscription.');
+      return thunkAPI.rejectWithValue(error.response.data.message || 'Error while registering.');
     }
   }
 );
 
-// Thunk pour la connexion
+// Thunk for connexion
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
   async (credentials: { email: string; password: string }, thunkAPI) => {
@@ -35,7 +36,7 @@ export const loginUser = createAsyncThunk(
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/login`, credentials);
       return response.data.token;
     } catch (error: any) {
-      return thunkAPI.rejectWithValue(error.response.data.message || 'Erreur lors de la connexion.');
+      return thunkAPI.rejectWithValue(error.response.data.message || 'Error while registering.');
     }
   }
 );

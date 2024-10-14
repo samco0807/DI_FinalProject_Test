@@ -1,7 +1,7 @@
 // frontend/src/pages/Home.tsx
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { fetchEvents } from '../store/slices/eventSlice';
+import { fetchEventsThunk } from '../store/slices/eventSlice';
 import { Link } from 'react-router-dom';
 
 const Home: React.FC = () => {
@@ -9,7 +9,7 @@ const Home: React.FC = () => {
   const { events, loading, error } = useAppSelector((state) => state.events);
 
   useEffect(() => {
-    dispatch(fetchEvents());
+    dispatch(fetchEventsThunk());
   }, [dispatch]);
 
   return (

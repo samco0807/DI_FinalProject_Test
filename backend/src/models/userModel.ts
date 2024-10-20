@@ -1,20 +1,33 @@
 // backend/src/models/userModel.ts
 import db from "../db/knex";
-import { User } from "./User.ts";
+import { User } from "./User";
 
-export const getUserByEmail = async (
+// Function to get user by mail
+export const _getUserByEmail = async (
   email: string
 ): Promise<User | undefined> => {
   return db<User>("users").where({ email }).first();
 };
 
-export const getUserById = async (id: number): Promise<User | undefined> => {
-  return db<User>("users").where({ id }).first();
+// Function to get user by name
+export const _getUserByName = async (name: string): Promise<User | undefined> => {
+  return db<User>("users").where({ name }).first();
 };
 
-export const createUser = async (user: Partial<User>): Promise<User> => {
-  const [newUser] = await db<User>("users").insert(user).returning("*");
+// Function to create new user
+export const _createUser = async (userData: Partial<User>): Promise<User> => {
+  const [newUser] = await db<User>("users").insert(userData).returning("*");
   return newUser;
 };
 
-// Add another function if needed
+// Function to update user profile
+export const _updateUser = async (userData: Partial<User>): Promise<User> => {
+  const [updateUser] = await db<User>("users").update(userData).returning("*");
+  return updateUser;
+};
+
+// Function to delete user
+export const _deleteUser = async (id: number): Promise<User> => {
+  const [deleteUser] = await db<User>("users").where({id}).del().returning("*");
+  return deleteUser;
+};

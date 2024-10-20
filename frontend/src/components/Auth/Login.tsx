@@ -31,14 +31,14 @@ const Login: React.FC = () => {
 
   return (
     <div className="auth-container">
-      <h2>Connexion</h2>
+      <h2>Sign in</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label>Email :</label>
           <input type="email" name="email" value={formData.email} onChange={handleChange} required />
         </div>
         <div>
-          <label>Mot de passe :</label>
+          <label>Password :</label>
           <input type="password" name="password" value={formData.password} onChange={handleChange} required />
         </div>
         {error && <p className="error">{error}</p>}

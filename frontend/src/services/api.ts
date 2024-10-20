@@ -28,7 +28,7 @@ api.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 401) {
       store.dispatch(logout());
-      toast.error('Votre session a expiré. Veuillez vous reconnecter.');
+      toast.error('Your session has expired. Please reconnect.');
     }
     return Promise.reject(error);
   }

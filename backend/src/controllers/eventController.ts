@@ -12,7 +12,7 @@ import { Event } from "../models/Event";
 // POST /api/events
 export const createEventHandler = async (req: Request, res: Response) => {
   const { title, description, category, location, date, time } = req.body;
-  const organizer_id = req.user?.userId;
+  const organizer_id = req.user?.id;
 
   if (!title || !description || !category || !location || !date || !time) {
     return res.status(400).json({ message: "All event fields are required." });
@@ -69,7 +69,7 @@ export const getEventByIdHandler = async (req: Request, res: Response) => {
 export const updateEventHandler = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { title, description, category, location, date, time } = req.body;
-  const organizer_id = req.user?.userId;
+  const organizer_id = req.user?.id;
 
   try {
     const event = await getEventById(Number(id));
@@ -102,7 +102,7 @@ export const updateEventHandler = async (req: Request, res: Response) => {
 // DELETE /api/events/:id
 export const deleteEventHandler = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const organizer_id = req.user?.userId;
+  const organizer_id = req.user?.id;
 
   try {
     const event = await getEventById(Number(id));

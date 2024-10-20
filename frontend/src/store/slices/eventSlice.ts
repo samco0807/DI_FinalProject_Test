@@ -37,7 +37,7 @@ export const fetchEventsThunk = createAsyncThunk(
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/events`);
       return response.data;
     } catch (error: any) {
-      return thunkAPI.rejectWithValue(error.response.data.message || 'Erreur lors de la récupération des événements.');
+      return thunkAPI.rejectWithValue(error.response.data.message || 'Error retrieving events.');
     }
   }
 );

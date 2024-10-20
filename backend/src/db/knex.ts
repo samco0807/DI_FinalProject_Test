@@ -1,6 +1,6 @@
 // backend/src/db/knex.ts
 import knex from 'knex';
-import config from './knexfile.ts';
+import config from './knexfile';
 import * as dotenv from 'dotenv';
 
 dotenv.config();

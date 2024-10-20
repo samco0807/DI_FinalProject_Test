@@ -25,6 +25,7 @@ const Register: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    console.log(formData);
     const resultAction = await dispatch(registerUser(formData));
     if (registerUser.fulfilled.match(resultAction)) {
       navigate('/dashboard');
@@ -33,30 +34,30 @@ const Register: React.FC = () => {
 
   return (
     <div className="auth-container">
-      <h2>Inscription</h2>
+      <h2>Register</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Nom :</label>
+          <label>Name</label>
           <input type="text" name="name" value={formData.name} onChange={handleChange} required />
         </div>
         <div>
-          <label>Email :</label>
+          <label>Email</label>
           <input type="email" name="email" value={formData.email} onChange={handleChange} required />
         </div>
         <div>
-          <label>Mot de passe :</label>
+          <label>Password</label>
           <input type="password" name="password" value={formData.password} onChange={handleChange} required />
         </div>
         <div>
-          <label>Rôle :</label>
+          <label>Role</label>
           <select name="role" value={formData.role} onChange={handleChange}>
-            <option value="volunteer">Bénévole</option>
-            <option value="organizer">Organisateur</option>
+            <option value="volunteer">Volunteer</option>
+            <option value="organizer">Host</option>
           </select>
         </div>
         {error && <p className="error">{error}</p>}
         <button type="submit" disabled={loading}>
-          {loading ? 'Inscription...' : 'S\'inscrire'}
+          {loading ? 'Inscription...' : 'Register'}
         </button>
       </form>
     </div>

@@ -2,8 +2,9 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import knex from "knex";
 
-exports.register = async (req: any, res: any) => {
+export const register = async (req: any, res: any) => {
   const { email, password } = req.body;
+  console.log(req.body);
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     await knex("users").insert({ email, password: hashedPassword });
@@ -13,7 +14,7 @@ exports.register = async (req: any, res: any) => {
   }
 };
 
-exports.login = async (req: any, res: any) => {
+export const login = async (req: any, res: any) => {
   const { email, password } = req.body;
   try {
     const user = await knex("users").where({ email }).first();

@@ -1,12 +1,13 @@
 // backend/src/middleware/authMiddleware.ts
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+const { JWT_SECRET } = process.env;
 
 interface JwtPayload {
   userId: number;
   role: string;
-  name:string;
-  email:string;
+  name: string;
+  email: string;
   iat: number;
   exp: number;
 }

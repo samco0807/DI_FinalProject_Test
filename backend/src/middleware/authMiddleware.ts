@@ -21,6 +21,38 @@ interface AuthenticatedRequest extends Request {
   };
 }
 
+/** generate and verify token */
+export const verifyAuth = (req: Request, res: Response) => {
+  const token = req.cookies.token;
+  if (!token) {
+    return res.status(401).json({ message: "No Taken Provided" });
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET) as {
+      userid: number,
+      email: string,
+    };
+    const newToken = jwt.sign(
+      { userid: decoded.userid, email: decoded.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+    /** set token in httpOnly cookie */
+    res.cookie("token", newToken, {
+      httpOnly: true,
+      maxAge: 3600 * 1000,
+    });
+
+    res.json({
+      message: "Login successfuly",
+      user: { userid: decoded.userid, email: decoded.email },
+      accessToken: newToken,
+    });
+  } catch (error) {
+    res.status(401).json({ message: "Invalid Token" });
+  }
+}
+
 export const authenticateToken = (
   req: AuthenticatedRequest,
   res: Response,

@@ -59,6 +59,8 @@ export const _deleteUser = async (id: number): Promise<User> => {
       .del()
       .returning("*");
     return deletedUser;
-  } catch (error) {console.error("Error deleting user:", error);
-    throw new Error("User deleting failed");}
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    throw new Error("User deleting failed");
+  }
 };

@@ -1,23 +1,27 @@
 // backend/src/controllers/eventController.ts
 import { Request, Response } from "express";
 import {
-  createEvent,
-  getAllEvents,
-  getEventById,
-  updateEvent,
-  deleteEvent,
+  _createEvent,
+  _getAllEvents,
+  _getEventById,
+  _getEventByName,
+  _updateEvent,
+  _deleteEvent,
 } from "../models/eventModel";
 import { Event } from "../models/Event";
 
 // POST /api/events
-export const createEventHandler = async (req: Request, res: Response) => {
+export const createEvent = async (req: Request, res: Response) => {
   const { title, description, category, location, date, time } = req.body;
   const organizer_id = req.user?.id;
-
+  // 1. we check if the organizer id exist so that the user can create the event
+  if (!organizer_id) {
+    return res.status(401).json({ message: "Unauthorized. No organizer ID" });
+  }
+  // 2. We check if every field is filled
   if (!title || !description || !category || !location || !date || !time) {
     return res.status(400).json({ message: "All event fields are required." });
   }
-
   try {
     const newEvent: Partial<Event> = {
       title,
@@ -29,7 +33,7 @@ export const createEventHandler = async (req: Request, res: Response) => {
       organizer_id,
     };
 
-    const createdEvent = await createEvent(newEvent);
+    const createdEvent = await _createEvent(newEvent);
 
     res.status(201).json(createdEvent);
   } catch (error) {
@@ -39,9 +43,9 @@ export const createEventHandler = async (req: Request, res: Response) => {
 };
 
 // GET /api/events
-export const getAllEventsHandler = async (req: Request, res: Response) => {
+export const getAllEvents = async (req: Request, res: Response) => {
   try {
-    const events = await getAllEvents();
+    const events = await _getAllEvents();
     res.status(200).json(events);
   } catch (error) {
     console.error(error);
@@ -50,11 +54,10 @@ export const getAllEventsHandler = async (req: Request, res: Response) => {
 };
 
 // GET /api/events/:id
-export const getEventByIdHandler = async (req: Request, res: Response) => {
+export const getEventById = async (req: Request, res: Response) => {
   const { id } = req.params;
-
   try {
-    const event = await getEventById(Number(id));
+    const event = await _getEventById(Number(id));
     if (!event) {
       return res.status(404).json({ message: "Event not found." });
     }
@@ -66,24 +69,24 @@ export const getEventByIdHandler = async (req: Request, res: Response) => {
 };
 
 // PUT /api/events/:id
-export const updateEventHandler = async (req: Request, res: Response) => {
+export const updateEvent = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { title, description, category, location, date, time } = req.body;
   const organizer_id = req.user?.id;
-
   try {
-    const event = await getEventById(Number(id));
+    // 1.We check if the event exists with the event id
+    const event = await _getEventById(Number(id));
     if (!event) {
       return res.status(404).json({ message: "Event not found." });
     }
-
+    // 2. If the event exists, we check if the user is an organizer
     if (event.organizer_id !== organizer_id) {
       return res
         .status(403)
         .json({ message: "Unauthorized to update this event." });
     }
-
-    const updatedEvent = await updateEvent(Number(id), {
+    // 3. if the event exists and the user is an organizer, the event is updated
+    const updatedEvent = await _updateEvent(Number(id), {
       title,
       description,
       category,
@@ -91,7 +94,6 @@ export const updateEventHandler = async (req: Request, res: Response) => {
       date,
       time,
     });
-
     res.status(200).json(updatedEvent);
   } catch (error) {
     console.error(error);
@@ -100,23 +102,23 @@ export const updateEventHandler = async (req: Request, res: Response) => {
 };
 
 // DELETE /api/events/:id
-export const deleteEventHandler = async (req: Request, res: Response) => {
+export const deleteEvent = async (req: Request, res: Response) => {
   const { id } = req.params;
   const organizer_id = req.user?.id;
-
   try {
-    const event = await getEventById(Number(id));
+    // 1. We check if the event exists with the id
+    const event = await _getEventById(Number(id));
     if (!event) {
       return res.status(404).json({ message: "Event not found." });
     }
-
+    // 2. we check if the user is an organizer with the organizer id
     if (event.organizer_id !== organizer_id) {
       return res
         .status(403)
         .json({ message: "Unauthorized to delete this event." });
     }
-
-    await deleteEvent(Number(id));
+    // 3. if the event exists and the user is an organizer, the event is deleted
+    await _deleteEvent(Number(id));
 
     res.status(200).json({ message: "Event deleted successfully." });
   } catch (error) {

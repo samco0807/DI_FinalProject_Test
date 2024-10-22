@@ -14,9 +14,6 @@ export const _getAllEvents = async (): Promise<Event[]> => {
 export const _getEventById = async (id: number): Promise<Event | undefined> => {
   return db<Event>("events").where({ id }).first();
 };
-export const _getEventByName = async (title: string): Promise<Event | undefined> => {
-  return db<Event>("events").where({ title }).first();
-};
 
 export const _updateEvent = async (
   id: number,

@@ -1,10 +1,10 @@
 // backend/src/controllers/eventController.ts
-import { Request, Response } from "express";
+import express from "express";
+import { NextFunction, Request, Response } from "express";
 import {
   _createEvent,
   _getAllEvents,
   _getEventById,
-  _getEventByName,
   _updateEvent,
   _deleteEvent,
 } from "../models/eventModel";
@@ -54,7 +54,7 @@ export const getAllEvents = async (req: Request, res: Response) => {
 };
 
 // GET /api/events/:id
-export const getEventById = async (req: Request, res: Response) => {
+export const getEventById = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   try {
     const event = await _getEventById(Number(id));
@@ -65,6 +65,7 @@ export const getEventById = async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error while fetching event." });
+    next(error)
   }
 };
 

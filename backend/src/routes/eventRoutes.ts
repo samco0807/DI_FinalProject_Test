@@ -18,12 +18,12 @@ router.get("/", getAllEvents);
 router.get("/:id", getEventById);
 
 // POST /api/events (protected)
-router.post("/", createEvent);
+router.post("/", authenticateToken, createEvent);
 
 // PUT /api/events/:id (protected)
-router.put("/:id", updateEvent);
+router.put("/:id", authenticateToken, updateEvent);
 
 // DELETE /api/events/:id (protected)
-router.delete("/:id", deleteEvent);
+router.delete("/:id", authenticateToken, deleteEvent);
 
 export default router;

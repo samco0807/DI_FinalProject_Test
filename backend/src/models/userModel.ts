@@ -16,6 +16,15 @@ export const _getUserByEmail = async (
   } catch (error) {}
 };
 
+// Function to get user by id
+export const _getUserById = async (
+  id: number
+): Promise<User | undefined> => {
+  try {
+    return db<User>("users").where({ id }).first();
+  } catch (error) {}
+};
+
 // Function to get user by name
 export const _getUserByName = async (
   name: string

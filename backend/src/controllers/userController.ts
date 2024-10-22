@@ -2,6 +2,7 @@
 import { Request, Response } from "express";
 import {
   _getAllUsers,
+  _getUserById,
   _getUserByEmail,
   _getUserByName,
   _createUser,
@@ -14,7 +15,7 @@ import { verify } from "crypto";
 import { error } from "console";
 require("dotenv").config();
 
-export const registerUser = async (req: Request, res: Response) => {
+export const register = async (req: Request, res: Response) => {
   const { password, email } = req.body;
   try {
     const existingUser = await _getUserByEmail(email);
@@ -33,7 +34,7 @@ export const registerUser = async (req: Request, res: Response) => {
   }
 };
 
-export const loginUser = async (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   try {
     const user = await _getUserByEmail(email);
@@ -88,6 +89,21 @@ export const getUserByMail = async (req: Request, res: Response) => {
       .json({ message: "Server error while fetching user profile by mail." });
   }
 };
+export const getUserById = async (req: Request, res: Response) => {
+  const userId = req.user?.id;
+  try {
+    const user = await _getUserById(userId!);
+    if (!user) {
+      return res.status(404).json({ message: "User with email not found." });
+    }
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Server error while fetching user profile by mail." });
+  }
+};
 
 // Function to find user by name
 export const getUserByName = async (req: Request, res: Response) => {
@@ -123,7 +139,7 @@ export const createUser = async (req: Request, res: Response) => {
 export const updateUser = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
-    const user = await _updateUser({ id: userId, userData: ...req.body });
+    const user = await _updateUser({ id: userId, userData: ...req.user });
     res.json(user);
   } catch (error) {
     res.status(500).json({ message: "Server error while updating user." });

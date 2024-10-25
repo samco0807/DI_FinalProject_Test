@@ -1,5 +1,5 @@
 // frontend/src/store/slices/authSlice.ts
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, createAsyncThunk, asyncThunkCreator } from "@reduxjs/toolkit";
 import axios from "axios";
 
 // Typescript
@@ -36,6 +36,9 @@ export const registerUser = createAsyncThunk(
     }
   }
 );
+
+
+
 
 // Thunk for connexion
 export const loginUser = createAsyncThunk(

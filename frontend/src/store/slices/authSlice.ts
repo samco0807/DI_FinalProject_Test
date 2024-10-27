@@ -15,7 +15,7 @@ const initialState: AuthState = {
   error: null,
 };
 
-// Thunk for register
+// Thunk for user register
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
   async (
@@ -40,7 +40,7 @@ export const registerUser = createAsyncThunk(
 
 
 
-// Thunk for connexion
+// Thunk for user connexion
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async (credentials: { email: string; password: string }, thunkAPI) => {

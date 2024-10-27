@@ -1,10 +1,10 @@
 // frontend/src/components/Layout/Header.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useAppSelector, useAppDispatch } from '../store/hooks';
-import { logout } from '../store/slices/authSlice';
+import { useAppSelector, useAppDispatch } from '../../store/hooks';
+import { logout } from '../../store/slices/authSlice';
 
-const Header: React.FC = () => {
+export const Header: React.FC = () => {
   const token = useAppSelector((state) => state.auth.token);
   const dispatch = useAppDispatch();
 
@@ -31,5 +31,3 @@ const Header: React.FC = () => {
     </header>
   );
 };
-
-export default Header;

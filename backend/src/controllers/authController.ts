@@ -1,10 +1,10 @@
 // backend/src/controllers/authController.ts
-import {Request, Response} from "express"
+import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import db from "../db/knex";
 
-export const register = async (req: any, res: any) => {
+export const register = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   console.log(req.body);
   try {
@@ -16,7 +16,7 @@ export const register = async (req: any, res: any) => {
   }
 };
 
-export const login = async (req: any, res: any) => {
+export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   try {
     const user = await db("users").where({ email }).first();

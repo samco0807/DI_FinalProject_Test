@@ -12,7 +12,7 @@ import {
 
 const router = Router();
 
-router.get("/users/:id",getAllUsers);
+router.get("/users",getAllUsers);
 router.get("/user/:id", getUserById);
 router.get("/user/mail", getUserByMail);
 router.get("/user/name", getUserByName);

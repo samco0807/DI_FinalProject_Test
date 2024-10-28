@@ -9,47 +9,9 @@ import {
   _updateUser,
   _deleteUser,
 } from "../models/userModel";
-import bcrypt from "bcryptjs";
-import { verify } from "crypto";
-
-import { error } from "console";
+import {  bcrypt} from "bcrypt";
 require("dotenv").config();
 
-export const register = async (req: Request, res: Response) => {
-  const { password, email } = req.body;
-  try {
-    const existingUser = await _getUserByEmail(email);
-    if (existingUser) {
-      return res.status(400).json({ message: "Email already exists" });
-    }
-    const hashPassword = await bcrypt.hash(password, 10);
-    const user = await _createUser({ email, password: hashPassword });
-    res.status(201).json({
-      message: "User registered successfully",
-      user,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
-
-export const login = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
-  try {
-    const user = await _getUserByEmail(email);
-    if (!user) {
-      return res.status(404).json({ message: "User not found....." });
-    }
-    const passwordMatch = await bcrypt.compare(password + "", user.password);
-    if (!passwordMatch) {
-      return res.status(401).json({ message: "Authentication failed" });
-    }
-  } catch (err) {
-    console.error("Error", error);
-    return res.status(401).json({ message: "Internal server error" });
-  }
-};
 
 // Function to get all the users
 export const getAllUsers = async (req: Request, res: Response) => {
@@ -127,9 +89,17 @@ export const getUserByName = async (req: Request, res: Response) => {
 
 // Function to create new user
 export const createUser = async (req: Request, res: Response) => {
-  const userId = req.user?.id;
+  const {name, email, password, role} = req.body;
+  if (!name||!email||!password||!role) {
+    return res.status(400).json({message:"You must complete the informations"})
+  }
   try {
-    const user = await _createUser(userId!);
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await _createUser({name, email, password:hashedPassword, role});
+    res.status(201).json({
+      message:"User created successfully", user
+    })
   } catch (error) {
     res.status(500).json({ message: "Server error while creating new user." });
   }
@@ -137,10 +107,14 @@ export const createUser = async (req: Request, res: Response) => {
 
 // Function to update user
 export const updateUser = async (req: Request, res: Response) => {
+  const userId = req.user?.id;
+  const userData=req.body // back up the updated data from req.body
+  if (!userId) {
+    return res.status(400).json({message:"User ID is required for update."})
+  }
   try {
-    const userId = req.user?.id;
-    const user = await _updateUser({ id: userId, userData: ...req.user });
-    res.json(user);
+    const updatedUser = await _updateUser({ userId, userData});
+    res.status(200).json(updatedUser)
   } catch (error) {
     res.status(500).json({ message: "Server error while updating user." });
   }

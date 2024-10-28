@@ -63,7 +63,6 @@ export const getEventById = async (req: Request, res: Response, next: NextFuncti
     res.status(200).json(event);
   } catch (error) {
     console.error(error);
-    // res.status(500).json({ message: "Server error while fetching event." });
     next(error)
   }
 };

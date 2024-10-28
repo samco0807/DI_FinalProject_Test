@@ -1,5 +1,11 @@
 // frontend/src/store/slices/authSlice.ts
-import { createSlice, PayloadAction, createAsyncThunk, asyncThunkCreator } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  PayloadAction,
+  createAsyncThunk,
+  asyncThunkCreator,
+} from "@reduxjs/toolkit";
+import { User } from "../../types/User"; // Import the User type
 import axios from "axios";
 
 // Typescript
@@ -7,10 +13,12 @@ interface AuthState {
   token: string | null;
   loading: boolean;
   error: string | null;
+  user: User | null;
 }
 
 const initialState: AuthState = {
   token: localStorage.getItem("token"),
+  user: null,
   loading: false,
   error: null,
 };
@@ -28,7 +36,7 @@ export const registerUser = createAsyncThunk(
         userData
       );
       console.log(response.data);
-      return response.data.token;
+      return { token: response.data.token, user: response.data.user };
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
         error.response.data.error || "Registration failed."
@@ -46,7 +54,7 @@ export const loginUser = createAsyncThunk(
         `${process.env.REACT_APP_API_URL}/auth/login`,
         credentials
       );
-      return response.data.token;
+      return { token: response.data.token, user: response.data.user };
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
         error.response.data.error || "Error while registering."
@@ -73,10 +81,11 @@ const authSlice = createSlice({
       })
       .addCase(
         registerUser.fulfilled,
-        (state, action: PayloadAction<string>) => {
+        (state, action: PayloadAction<{ token: string; user: User }>) => {
           state.loading = false;
-          state.token = action.payload;
-          localStorage.setItem("token", action.payload);
+          state.token = action.payload.token;
+          state.user = action.payload.user;
+          localStorage.setItem("token", action.payload.token);
         }
       )
       .addCase(registerUser.rejected, (state, action) => {
@@ -88,11 +97,15 @@ const authSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(loginUser.fulfilled, (state, action: PayloadAction<string>) => {
-        state.loading = false;
-        state.token = action.payload;
-        localStorage.setItem("token", action.payload);
-      })
+      .addCase(
+        loginUser.fulfilled,
+        (state, action: PayloadAction<{ token: string; user: User }>) => {
+          state.loading = false;
+          state.token = action.payload.token;
+          state.user = action.payload.user;
+          localStorage.setItem("token", action.payload.token);
+        }
+      )
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;

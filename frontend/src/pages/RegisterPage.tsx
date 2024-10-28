@@ -1,17 +1,17 @@
 // frontend/src/pages/Register.tsx
-import React, { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { registerUser } from '../store/slices/authSlice';
-import { Navigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { registerUser } from "../store/slices/authSlice";
+import { Navigate } from "react-router-dom";
 
 export const Register: React.FC = () => {
   const dispatch = useAppDispatch();
   const auth = useAppSelector((state) => state.auth);
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
   const [error, setError] = useState<string | null>(null);
 
@@ -52,12 +52,12 @@ export const Register: React.FC = () => {
       <h2>Sign in</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="username">User name</label>
+          <label htmlFor="name">Username</label>
           <input
             type="text"
-            id="username"
-            name="username"
-            value={formData.username}
+            id="name"
+            name="name"
+            value={formData.name}
             onChange={handleChange}
             required
           />
@@ -97,7 +97,7 @@ export const Register: React.FC = () => {
         </div>
         {error && <p className="error">{error}</p>}
         <button type="submit" disabled={auth.loading}>
-          {auth.loading ? "Inscription..." : "S'inscrire"}
+          {auth.loading ? "Loging in..." : "Register"}
         </button>
       </form>
     </div>

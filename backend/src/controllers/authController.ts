@@ -1,13 +1,15 @@
+// backend/src/controllers/authController.ts
+import {Request, Response} from "express"
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import knex from "knex";
+import db from "../db/knex";
 
 export const register = async (req: any, res: any) => {
   const { email, password } = req.body;
   console.log(req.body);
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-    await knex("users").insert({ email, password: hashedPassword });
+    await db("users").insert({ email, password: hashedPassword });
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
     res.status(500).json({ error: "Registration failed" });
@@ -17,7 +19,7 @@ export const register = async (req: any, res: any) => {
 export const login = async (req: any, res: any) => {
   const { email, password } = req.body;
   try {
-    const user = await knex("users").where({ email }).first();
+    const user = await db("users").where({ email }).first();
     if (!user) {
       return res.status(400).json({ error: "Invalid credentials" });
     }

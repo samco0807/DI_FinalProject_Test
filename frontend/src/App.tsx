@@ -3,12 +3,19 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
-import { Header } from "./components/Header";
-import { Footer } from "./components/Footer";
+import { Header } from "./components/Layout/Header";
+import { Footer } from "./components/Layout/Footer";
+import Navbar from './components//Layout/Navbar';
 import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/HomePage";
 import Dashboard from "./pages/Dashboard";
 import EventPage from "./pages/EventPage";
+import AdminPage from "./pages/AdminPage"
+import RegisterPage from './pages/RegisterPage';
+import UserProfilePage from './pages/UserProfilePage';
+
+
+
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";

@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { loginUser } from "../store/slices/authSlice";
-import { Redirect, Link } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 
 export const Login: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -36,7 +36,7 @@ export const Login: React.FC = () => {
 
   // Redirect if user is already logged in
   if (auth.token) {
-    return <Redirect to="/dashboard" />;
+    return <Navigate to="/dashboard" />;
   }
 
   return (

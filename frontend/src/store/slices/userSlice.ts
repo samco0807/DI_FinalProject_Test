@@ -59,13 +59,13 @@ export const fetchUsersByIdThunk = createAsyncThunk(
     }
   }
 );
-// Thunk to fetch a user by title
-export const fetchUsersByTitleThunk = createAsyncThunk(
-  "users/fetchUsersByTitle",
-  async (title: string, thunkAPI) => {
+// Thunk to fetch a user by name
+export const fetchUsersByNameThunk = createAsyncThunk(
+  "users/fetchUsersByName",
+  async (name: string, thunkAPI) => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/users?title=${title}`
+        `${process.env.REACT_APP_API_URL}/users?name=${name}`
       );
       return response.data;
     } catch (error: any) {

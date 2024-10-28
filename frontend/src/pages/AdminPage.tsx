@@ -1,44 +1,43 @@
 // frontend/src/pages/AdminPage.tsx
-
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { fetchUsers, deleteUser } from '../store/slices/userSlice';
-import { fetchEvents, deleteEvent } from '../store/slices/eventSlice';
+import {fetchUsersThunk, deleteUserThunk} from '../store/slices/userSlice';
+import { fetchEventsThunk, deleteEventThunk } from '../store/slices/eventSlice';
 
-const AdminPage: React.FC = () => {
+export const AdminPage: React.FC = () => {
   const dispatch = useAppDispatch();
-  const users = useAppSelector((state) => state.users.data);
+  const users = useAppSelector((state) => state.users.users);
   const events = useAppSelector((state) => state.events.events);
   const loadingUsers = useAppSelector((state) => state.users.loading);
   const loadingEvents = useAppSelector((state) => state.events.loading);
 
   useEffect(() => {
-    dispatch(fetchUsers());
-    dispatch(fetchEvents());
+    dispatch(fetchUsersThunk());
+    dispatch(fetchEventsThunk());
   }, [dispatch]);
 
   const handleDeleteUser = (userId: number) => {
-    dispatch(deleteUser(userId));
+    dispatch(deleteUserThunk(userId));
   };
 
   const handleDeleteEvent = (eventId: number) => {
-    dispatch(deleteEvent(eventId));
+    dispatch(deleteEventThunk(eventId));
   };
 
   return (
     <div className="admin-page">
-      <h2>Page d'administration</h2>
+      <h2>Administration page</h2>
 
       <section className="admin-section">
-        <h3>Utilisateurs</h3>
+        <h3>Users</h3>
         {loadingUsers ? (
-          <p>Chargement des utilisateurs...</p>
+          <p>Loading users...</p>
         ) : (
           <table>
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Nom</th>
+                <th>Name</th>
                 <th>Email</th>
                 <th>Actions</th>
               </tr>
@@ -50,7 +49,7 @@ const AdminPage: React.FC = () => {
                   <td>{user.name}</td>
                   <td>{user.email}</td>
                   <td>
-                    <button onClick={() => handleDeleteUser(user.id)}>Supprimer</button>
+                    <button onClick={() => handleDeleteUser(user.id)}>Delete</button>
                   </td>
                 </tr>
               ))}
@@ -60,15 +59,15 @@ const AdminPage: React.FC = () => {
       </section>
 
       <section className="admin-section">
-        <h3>Événements</h3>
+        <h3>Events</h3>
         {loadingEvents ? (
-          <p>Chargement des événements...</p>
+          <p>Loading events...</p>
         ) : (
           <table>
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Titre</th>
+                <th>Title</th>
                 <th>Date</th>
                 <th>Actions</th>
               </tr>
@@ -80,7 +79,7 @@ const AdminPage: React.FC = () => {
                   <td>{event.title}</td>
                   <td>{event.date}</td>
                   <td>
-                    <button onClick={() => handleDeleteEvent(event.id)}>Supprimer</button>
+                    <button onClick={() => handleDeleteEvent(event.id)}>handleDeleteUser</button>
                   </td>
                 </tr>
               ))}
@@ -91,5 +90,3 @@ const AdminPage: React.FC = () => {
     </div>
   );
 };
-
-export default AdminPage;

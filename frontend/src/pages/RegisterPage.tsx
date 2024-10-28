@@ -1,9 +1,8 @@
 // frontend/src/pages/Register.tsx
-
 import React, { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { registerUser } from '../store/slices/authSlice';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 export const Register: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -26,34 +25,34 @@ export const Register: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Vérifier que les mots de passe correspondent
+    // Check that passwords match
     if (formData.password !== formData.confirmPassword) {
       setError("Les mots de passe ne correspondent pas.");
       return;
     }
 
-    // Effacer l'erreur avant de soumettre
+    // Clear error before submitting
     setError(null);
 
-    // Envoyer les données de formulaire via l'action registerUser
+    // Submit form data via registerUser action
     try {
       await dispatch(registerUser(formData)).unwrap();
     } catch (err: any) {
-      setError(err.message || "Erreur lors de l'inscription.");
+      setError(err.message || "Error while registering.");
     }
   };
 
-  // Rediriger si l'utilisateur est déjà connecté
+  // Navigate if user is already logged in
   if (auth.token) {
-    return <Redirect to="/dashboard" />;
+    return <Navigate to="/dashboard" />;
   }
 
   return (
     <div className="register">
-      <h2>Inscription</h2>
+      <h2>Sign in</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="username">Nom d'utilisateur</label>
+          <label htmlFor="username">User name</label>
           <input
             type="text"
             id="username"
@@ -75,7 +74,7 @@ export const Register: React.FC = () => {
           />
         </div>
         <div>
-          <label htmlFor="password">Mot de passe</label>
+          <label htmlFor="password">Password</label>
           <input
             type="password"
             id="password"
@@ -86,7 +85,7 @@ export const Register: React.FC = () => {
           />
         </div>
         <div>
-          <label htmlFor="confirmPassword">Confirmer le mot de passe</label>
+          <label htmlFor="confirmPassword">Confirm password</label>
           <input
             type="password"
             id="confirmPassword"

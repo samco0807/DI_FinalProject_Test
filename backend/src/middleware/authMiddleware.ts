@@ -1,7 +1,10 @@
 // backend/src/middleware/authMiddleware.ts
+import { configDotenv } from "dotenv";
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-const { JWT_SECRET } = process.env;
+configDotenv;
+
+const JWT_SECRET = process.env.JWT_SECRET as string;
 
 interface JwtPayload {
   userId: number;
@@ -10,6 +13,7 @@ interface JwtPayload {
   email: string;
   iat: number;
   exp: number;
+  password:any;
 }
 
 interface AuthenticatedRequest extends Request {
@@ -18,23 +22,24 @@ interface AuthenticatedRequest extends Request {
     role: string;
     name: string;
     email: string;
+    password: string;
   };
 }
 
 /** generate and verify token */
-export const verifyAuth = (req: Request, res: Response) => {
-  const token = req.cookies.token;
+export const verifyAuth = (req: Request, res: Response, next: NextFunction) => {
+  const token = req.cookies?.token;
   if (!token) {
-    return res.status(401).json({ message: "No Taken Provided" });
+    return res.status(401).json({ message: "No Token Provided" });
   }
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET) as {
-      userid: number,
-      email: string,
+    const decoded = jwt.verify(token, JWT_SECRET) as {
+      userId: number;
+      email: string;
     };
     const newToken = jwt.sign(
-      { userid: decoded.userid, email: decoded.email },
-      process.env.JWT_SECRET,
+      { userId: decoded.userId, email: decoded.email },
+      JWT_SECRET,
       { expiresIn: "1h" }
     );
     /** set token in httpOnly cookie */
@@ -45,13 +50,14 @@ export const verifyAuth = (req: Request, res: Response) => {
 
     res.json({
       message: "Login successfuly",
-      user: { userid: decoded.userid, email: decoded.email },
+      user: { userid: decoded.userId, email: decoded.email },
       accessToken: newToken,
     });
   } catch (error) {
     res.status(401).json({ message: "Invalid Token" });
   }
-}
+  next();
+};
 
 export const authenticateToken = (
   req: AuthenticatedRequest,
@@ -65,7 +71,7 @@ export const authenticateToken = (
     return res.status(401).json({ message: "Access token missing." });
   }
 
-  jwt.verify(token, process.env.JWT_SECRET as string, (err, decoded) => {
+  jwt.verify(token, JWT_SECRET as string, (err, decoded) => {
     if (err) {
       return res.status(403).json({ message: "Invalid or expired token." });
     }
@@ -76,10 +82,10 @@ export const authenticateToken = (
       role: payload.role,
       name: payload.name,
       email: payload.email,
+      password: payload.password,
     };
-
-    next();
   });
+  next();
 };
 
 // Middleware to check roles (optional)

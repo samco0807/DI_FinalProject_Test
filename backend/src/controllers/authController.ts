@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import db from "../db/knex";
 
-export const register = async (req: Request, res: Response) => {
+export const registerUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   console.log(req.body);
   try {
@@ -16,7 +16,7 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
-export const login = async (req: Request, res: Response) => {
+export const loginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   try {
     const user = await db("users").where({ email }).first();

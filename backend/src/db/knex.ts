@@ -1,13 +1,17 @@
 // backend/src/db/knex.ts
 import knex from 'knex';
-import config from './knexfile';
 import * as dotenv from 'dotenv';
-
 dotenv.config();
 
-const environment = process.env.NODE_ENV || 'development';
-const connectionConfig = config[environment];
+const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, PGPORT } = process.env;
 
-const db = knex(connectionConfig);
-
-export default db;
+export const db = knex({
+  client: "pg",
+  connection: {
+    host: PGHOST,
+    user: PGUSER,
+    database: PGDATABASE,
+    password: PGPASSWORD,
+    ssl: { rejectUnauthorized: false },
+  },
+});

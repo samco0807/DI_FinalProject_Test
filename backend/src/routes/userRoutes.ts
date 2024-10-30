@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { authenticateToken } from "../middleware/authMiddleware.js";
+import { authenticateToken } from "../middleware/authMiddleware";
 import {
   getAllUsers,
   getUserById,
@@ -8,22 +8,16 @@ import {
   createUser,
   updateUser,
   deleteUser,
-} from "../controllers/userController.js";
+} from "../controllers/userController";
 
 const router = Router();
 
-router.get("/users",getAllUsers);
-router.get("/user/:id", getUserById);
-router.get("/user/mail", getUserByMail);
-router.get("/user/name", getUserByName);
-router.post("/", createUser);
-router.put("/users", updateUser);
-router.delete("/users/:id", deleteUser);
-
-
-router.post("/register", registerUser);
-router.post("/login", loginUser);
-router.delete("/logout", logoutUser);
-router.get("/auth", userController, authenticateToken.verifyAuth);
+router.get("/users", authenticateToken, getAllUsers);
+router.get("/:id", authenticateToken, getUserById);
+router.get("/mail", authenticateToken, getUserByMail);
+router.get("/name", authenticateToken, getUserByName);
+router.post("/", authenticateToken, createUser);
+router.put("/users", authenticateToken, updateUser);
+router.delete("/users/:id", authenticateToken, deleteUser);
 
 export default router;

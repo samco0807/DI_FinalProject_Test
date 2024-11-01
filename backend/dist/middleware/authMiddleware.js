@@ -4,17 +4,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authorizeRoles = exports.authenticateToken = exports.verifyAuth = void 0;
+// backend/src/middleware/authMiddleware.ts
+const dotenv_1 = require("dotenv");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const { JWT_SECRET } = process.env;
+dotenv_1.configDotenv;
+const JWT_SECRET = process.env.JWT_SECRET;
 /** generate and verify token */
-const verifyAuth = (req, res) => {
-    const token = req.cookies.token;
+const verifyAuth = (req, res, next) => {
+    var _a;
+    const token = (_a = req.cookies) === null || _a === void 0 ? void 0 : _a.token;
     if (!token) {
-        return res.status(401).json({ message: "No Taken Provided" });
+        return res.status(401).json({ message: "No Token Provided" });
     }
     try {
-        const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
-        const newToken = jsonwebtoken_1.default.sign({ userid: decoded.userid, email: decoded.email }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        const decoded = jsonwebtoken_1.default.verify(token, JWT_SECRET);
+        const newToken = jsonwebtoken_1.default.sign({ userId: decoded.userId, email: decoded.email }, JWT_SECRET, { expiresIn: "1h" });
         /** set token in httpOnly cookie */
         res.cookie("token", newToken, {
             httpOnly: true,
@@ -22,13 +26,14 @@ const verifyAuth = (req, res) => {
         });
         res.json({
             message: "Login successfuly",
-            user: { userid: decoded.userid, email: decoded.email },
+            user: { userid: decoded.userId, email: decoded.email },
             accessToken: newToken,
         });
     }
     catch (error) {
         res.status(401).json({ message: "Invalid Token" });
     }
+    next();
 };
 exports.verifyAuth = verifyAuth;
 const authenticateToken = (req, res, next) => {
@@ -37,7 +42,7 @@ const authenticateToken = (req, res, next) => {
     if (!token) {
         return res.status(401).json({ message: "Access token missing." });
     }
-    jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    jsonwebtoken_1.default.verify(token, JWT_SECRET, (err, decoded) => {
         if (err) {
             return res.status(403).json({ message: "Invalid or expired token." });
         }
@@ -47,9 +52,10 @@ const authenticateToken = (req, res, next) => {
             role: payload.role,
             name: payload.name,
             email: payload.email,
+            password: payload.password,
         };
-        next();
     });
+    next();
 };
 exports.authenticateToken = authenticateToken;
 // Middleware to check roles (optional)

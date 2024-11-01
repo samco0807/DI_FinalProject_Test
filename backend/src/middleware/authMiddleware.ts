@@ -13,7 +13,7 @@ interface JwtPayload {
   email: string;
   iat: number;
   exp: number;
-  password:any;
+  password:string;
 }
 
 interface AuthenticatedRequest extends Request {

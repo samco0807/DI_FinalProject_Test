@@ -3,7 +3,7 @@ import knex from 'knex';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, PGPORT } = process.env;
+const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD } = process.env;
 
 export const db = knex({
   client: "pg",

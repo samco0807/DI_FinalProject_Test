@@ -1,5 +1,5 @@
 // backend/src/models/userModel.ts
-import db from "../db/knex";
+import { db } from "../db/knex";
 import { User } from "./User";
 
 // Function to get all users
@@ -17,9 +17,7 @@ export const _getUserByEmail = async (
 };
 
 // Function to get user by id
-export const _getUserById = async (
-  id: number
-): Promise<User | undefined> => {
+export const _getUserById = async (id: number): Promise<User | undefined> => {
   try {
     return db<User>("users").where({ id }).first();
   } catch (error) {}

@@ -1,5 +1,5 @@
 // backend/src/models/eventModel.ts
-import db from "../db/knex";
+import { db } from "../db/knex";
 import { Event } from "../models/Event";
 
 export const _createEvent = async (event: Partial<Event>): Promise<Event> => {

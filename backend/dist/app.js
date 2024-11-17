@@ -14,7 +14,6 @@ const port = 3000;
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 // app.get("/", (req, res) => res.send("Hello World!"));
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 // Middlewares
 app.use(express_1.default.json());
 // Routes
@@ -23,4 +22,5 @@ app.use("/api/events", eventRoutes_1.default);
 app.use("/api/users", userRoutes_1.default);
 // Error handling middleware
 app.use(errorHandler_1.errorHandler);
+app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 exports.default = app;

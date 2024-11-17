@@ -10,6 +10,7 @@ import {
   _deleteUser,
 } from "../models/userModel";
 import bcrypt from "bcrypt";
+import { User } from "../models/User";
 require("dotenv").config();
 
 // Function to get all the users
@@ -50,6 +51,7 @@ export const getUserByMail = async (req: Request, res: Response) => {
       .json({ message: "Server error while fetching user profile by mail." });
   }
 };
+
 export const getUserById = async (req: Request, res: Response) => {
   const userId = req.user?.id;
   try {
@@ -96,7 +98,7 @@ export const createUser = async (req: Request, res: Response) => {
   }
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
- 
+
     const user = await _createUser({
       name,
       email,
@@ -128,7 +130,7 @@ export const updateUser = async (req: Request, res: Response) => {
   }
 
   try {
-    const updatedUser = await _updateUser(userId, userData );
+    const updatedUser = await _updateUser(userId, userData);
     res.status(200).json(updatedUser);
   } catch (error) {
     res.status(500).json({ message: "Server error while updating user." });
@@ -138,14 +140,15 @@ export const updateUser = async (req: Request, res: Response) => {
 // Function to delete user
 export const deleteUser = async (req: Request, res: Response) => {
   const userId = req.user?.id;
-    // Check that the user ID is present
-if (!userId) {
-  return res.status(400).json({message:"User ID is required for deletion."})
-}
+  // Check that the user ID is present
+  if (!userId) {
+    return res
+      .status(400)
+      .json({ message: "User ID is required for deletion." });
+  }
   try {
-
     await _deleteUser(userId!);
-    res.status(204).send() // No content to send back
+    res.status(204).send(); // No content to send back
   } catch (error) {
     res.status(500).json({ message: "Server error while deleting user." });
   }

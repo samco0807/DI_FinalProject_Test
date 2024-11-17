@@ -12,7 +12,6 @@ dotenv.config();
 const app = express();
 
 // app.get("/", (req, res) => res.send("Hello World!"));
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
 // Middlewares
 app.use(express.json());
@@ -25,4 +24,5 @@ app.use("/api/users", userRoutes);
 // Error handling middleware
 app.use(errorHandler);
 
+app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 export default app;

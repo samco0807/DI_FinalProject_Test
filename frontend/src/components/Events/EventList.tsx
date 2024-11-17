@@ -2,6 +2,8 @@
 import React from "react";
 import { EventCard } from "./EventCard";
 import { Event } from "../../types/Event";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 interface EventListProps {
   events: Event[];

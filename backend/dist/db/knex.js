@@ -31,7 +31,7 @@ exports.db = void 0;
 const knex_1 = __importDefault(require("knex"));
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
-const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, PGPORT } = process.env;
+const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD } = process.env;
 exports.db = (0, knex_1.default)({
     client: "pg",
     connection: {

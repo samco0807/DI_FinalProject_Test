@@ -1,7 +1,8 @@
 // frontend/src/pages/EventPage.tsx
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { API_URL } from "../config";
+import axios from "axios";
 
 interface Event {
   id: number;
@@ -16,7 +17,7 @@ interface Event {
   updated_at: string;
 }
 
-const EventPage: React.FC = () => {
+export const EventPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -25,10 +26,12 @@ const EventPage: React.FC = () => {
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/events/${id}`);
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/events/${id}`
+        );
         setEvent(response.data);
       } catch (err: any) {
-        setError(err.response?.data?.message || 'Erreur lors de la récupération de l\'événement.');
+        setError(err.response?.data?.message || "Error retrieving event.");
       } finally {
         setLoading(false);
       }
@@ -59,4 +62,70 @@ const EventPage: React.FC = () => {
   );
 };
 
-export default EventPage;
+// Creation event form
+export const CreateEventPage: React.FC = () => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
+  const [location, setLocation] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await axios.post(`${API_URL}/events`, {
+        title,
+        description,
+        category,
+        location,
+        date,
+        time,
+      });
+      alert("Event created successfully!");
+    } catch (error) {
+      console.error("Error creating event:", error);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        placeholder="Title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        required
+      />
+      <input
+        placeholder="Description"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        required
+      />
+      <input
+        type="text"
+        placeholder="Category"
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="Location"
+        value={location}
+        onChange={(e) => setLocation(e.target.value)}
+      />
+      <input
+        type="date"
+        value={date}
+        onChange={(e) => setDate(e.target.value)}
+      />
+      <input
+        type="time"
+        value={time}
+        onChange={(e) => setTime(e.target.value)}
+      />
+      <button type="submit">Create Event</button>
+    </form>
+  );
+};

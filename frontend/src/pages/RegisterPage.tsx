@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { registerUser } from "../store/slices/authSlice";
 import { Navigate } from "react-router-dom";
 
-export const Register: React.FC = () => {
+export const RegisterPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const auth = useAppSelector((state) => state.auth);
   const [formData, setFormData] = useState({

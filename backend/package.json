@@ -5,8 +5,8 @@
   "main": "app.ts",
   "scripts": {
     "build": "tsc",
-    "start": "npm run build && node dist/app.js",
-    "dev": "nodemon --watch 'src/**/*.ts' --exec 'npm run build && node dist/app.js'"
+    "start": "npm run build && node dist/app.ts",
+    "dev": "nodemon --watch 'src/**/*.ts' --exec 'npm run build && node dist/app.ts'"
   },
   "keywords": [],
   "author": "",

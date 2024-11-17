@@ -158,7 +158,9 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
     // Check that the user ID is present
     if (!userId) {
-        return res.status(400).json({ message: "User ID is required for deletion." });
+        return res
+            .status(400)
+            .json({ message: "User ID is required for deletion." });
     }
     try {
         yield (0, userModel_1._deleteUser)(userId);

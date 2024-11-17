@@ -4,7 +4,12 @@ import { User } from "./User";
 
 // Function to get all users
 export const _getAllUsers = async (): Promise<User[]> => {
-  return db<User>("users").select("*");
+  try {
+    return db<User>("users").select("*");
+  } catch (error) {
+    console.error("Error fetching all the users:", error);
+    throw new Error("Fetching all the users failed");
+  }
 };
 
 // Function to get user by mail
@@ -13,14 +18,20 @@ export const _getUserByEmail = async (
 ): Promise<User | undefined> => {
   try {
     return db<User>("users").where({ email }).first();
-  } catch (error) {}
+  } catch (error) {
+    console.error("Error fetching user by email:", error);
+    throw new Error("Fetching user by email failed");
+  }
 };
 
 // Function to get user by id
 export const _getUserById = async (id: number): Promise<User | undefined> => {
   try {
     return db<User>("users").where({ id }).first();
-  } catch (error) {}
+  } catch (error) {
+    console.error("Error fetching user by id:", error);
+    throw new Error("User fetching user by id failed");
+  }
 };
 
 // Function to get user by name

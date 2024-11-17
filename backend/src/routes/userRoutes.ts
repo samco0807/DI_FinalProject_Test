@@ -12,10 +12,10 @@ import {
 
 const router = Router();
 
-router.get("/users", authenticateToken, getAllUsers);
-router.get("/:id", authenticateToken, getUserById);
-router.get("/mail", authenticateToken, getUserByMail);
-router.get("/name", authenticateToken, getUserByName);
+router.get("/users", getAllUsers);
+router.get("/:id", getUserById);
+router.get("/mail", getUserByMail);
+router.get("/name", getUserByName);
 router.post("/", authenticateToken, createUser);
 router.put("/users", authenticateToken, updateUser);
 router.delete("/users/:id", authenticateToken, deleteUser);

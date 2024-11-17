@@ -1,5 +1,5 @@
 // frontend/src/types/Event.ts
-interface Event {
+export interface Event {
     id: number;
     title: string;
     description: string;

@@ -15,13 +15,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.loginUser = exports.registerUser = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
-const knex_1 = __importDefault(require("../db/knex"));
+const knex_1 = require("../db/knex");
 const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
     console.log(req.body);
     try {
         const hashedPassword = yield bcryptjs_1.default.hash(password, 10);
-        yield (0, knex_1.default)("users").insert({ email, password: hashedPassword });
+        yield (0, knex_1.db)("users").insert({ email, password: hashedPassword });
         res.status(201).json({ message: "User registered successfully" });
     }
     catch (error) {
@@ -32,7 +32,7 @@ exports.registerUser = registerUser;
 const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
     try {
-        const user = yield (0, knex_1.default)("users").where({ email }).first();
+        const user = yield (0, knex_1.db)("users").where({ email }).first();
         if (!user) {
             return res.status(400).json({ error: "Invalid credentials" });
         }

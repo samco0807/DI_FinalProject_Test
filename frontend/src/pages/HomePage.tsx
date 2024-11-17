@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchEventsThunk } from '../store/slices/eventSlice';
 import { Link } from 'react-router-dom';
 
-const Home: React.FC = () => {
+export const Home: React.FC = () => {
   const dispatch = useAppDispatch();
   const { events, loading, error } = useAppSelector((state) => state.events);
 
@@ -41,5 +41,3 @@ const Home: React.FC = () => {
     </div>
   );
 };
-
-export default Home;

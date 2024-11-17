@@ -2,7 +2,7 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import db from "../db/knex";
+import { db } from "../db/knex";
 
 export const registerUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;

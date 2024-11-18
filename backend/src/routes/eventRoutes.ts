@@ -18,7 +18,7 @@ router.get("/", getAllEvents);
 router.get("/:id", getEventById);
 
 // POST /api/events (protected)
-router.post("/events", authenticateToken, createEvent);
+router.post("/", authenticateToken, createEvent);
 
 // PUT /api/events/:id (protected)
 router.put("/:id", authenticateToken, updateEvent);

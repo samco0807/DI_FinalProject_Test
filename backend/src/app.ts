@@ -5,11 +5,14 @@ import eventRoutes from "./routes/eventRoutes";
 import userRoutes from "./routes/userRoutes";
 import { errorHandler } from "./middleware/errorHandler";
 import dotenv from "dotenv";
+import cors from "cors";
+
 const port = 3000;
 
 dotenv.config();
 
 const app = express();
+app.use(cors());
 
 // app.get("/", (req, res) => res.send("Hello World!"));
 

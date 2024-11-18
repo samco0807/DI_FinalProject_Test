@@ -13,7 +13,7 @@ router.get("/", eventController_1.getAllEvents);
 // GET /api/events/:id
 router.get("/:id", eventController_1.getEventById);
 // POST /api/events (protected)
-router.post("/events", authMiddleware_1.authenticateToken, eventController_1.createEvent);
+router.post("/", authMiddleware_1.authenticateToken, eventController_1.createEvent);
 // PUT /api/events/:id (protected)
 router.put("/:id", authMiddleware_1.authenticateToken, eventController_1.updateEvent);
 // DELETE /api/events/:id (protected)

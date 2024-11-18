@@ -26,9 +26,7 @@ export const EventPage: React.FC = () => {
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/events/${id}`
-        );
+        const response = await axios.get(`${process.env.API_URL}/events/${id}`);
         setEvent(response.data);
       } catch (err: any) {
         setError(err.response?.data?.message || "Error retrieving event.");
@@ -70,9 +68,11 @@ export const CreateEventPage: React.FC = () => {
   const [location, setLocation] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
     try {
       await axios.post(`${API_URL}/events`, {
         title,
@@ -83,8 +83,9 @@ export const CreateEventPage: React.FC = () => {
         time,
       });
       alert("Event created successfully!");
-    } catch (error) {
-      console.error("Error creating event:", error);
+    } catch (err: any) {
+      console.error("Error creating event:", err);
+      setError(err.response?.data?.message || "Error creating event.");
     }
   };
 

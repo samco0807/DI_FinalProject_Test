@@ -14,13 +14,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.loginUser = exports.registerUser = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const knex_1 = require("../db/knex");
 const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
     console.log(req.body);
     try {
-        const hashedPassword = yield bcryptjs_1.default.hash(password, 10);
+        const hashedPassword = yield bcrypt_1.default.hash(password, 10);
         yield (0, knex_1.db)("users").insert({ email, password: hashedPassword });
         res.status(201).json({ message: "User registered successfully" });
     }
@@ -36,7 +36,7 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (!user) {
             return res.status(400).json({ error: "Invalid credentials" });
         }
-        const isMatch = yield bcryptjs_1.default.compare(password, user.password);
+        const isMatch = yield bcrypt_1.default.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ error: "Invalid crede credentials" });
         }

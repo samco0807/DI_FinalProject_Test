@@ -1,7 +1,7 @@
 // backend/src/controllers/authController.ts
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 import { db } from "../db/knex";
 
 export const registerUser = async (req: Request, res: Response) => {

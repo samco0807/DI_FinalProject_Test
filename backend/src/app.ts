@@ -23,6 +23,6 @@ app.use("/api/users", userRoutes);
 
 // Error handling middleware
 app.use(errorHandler);
-
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+
 export default app;

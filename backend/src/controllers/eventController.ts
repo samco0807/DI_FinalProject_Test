@@ -8,6 +8,7 @@ import {
   _deleteEvent,
 } from "../models/eventModel";
 import { Event } from "../models/Event";
+import { ok } from "assert";
 
 // POST /api/events
 export const createEvent = async (req: Request, res: Response) => {
@@ -53,39 +54,58 @@ export const getAllEvents = async (req: Request, res: Response) => {
 };
 
 // GET /api/events/:id
-export const getEventById = async (req: Request, res: Response, next: NextFunction) => {
+export const getEventById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { id } = req.params;
+  const eventId = parseInt(id, 10);
+
+  // Validate the input
+  if (isNaN(eventId)) {
+    return res
+      .status(400)
+      .json({ message: "Invalid event ID. Must be a number." });
+  }
+
   try {
-    const event = await _getEventById(Number(id));
+    const event = await _getEventById(eventId);
     if (!event) {
       return res.status(404).json({ message: "Event not found." });
     }
     res.status(200).json(event);
   } catch (error) {
     console.error(error);
-    next(error)
+    next(error);
   }
 };
 
 // PUT /api/events/:id
 export const updateEvent = async (req: Request, res: Response) => {
   const { id } = req.params;
+  const eventId = parseInt(id, 10);
   const { title, description, category, location, date, time } = req.body;
   const organizer_id = req.user?.id;
+
+  // Validate the input
+  if (isNaN(eventId)) {
+    return res
+      .status(400)
+      .json({ message: "Invalid event ID. Must be a number." });
+  }
+
   try {
-    // 1.We check if the event exists with the event id
-    const event = await _getEventById(Number(id));
+    const event = await _getEventById(eventId);
     if (!event) {
       return res.status(404).json({ message: "Event not found." });
     }
-    // 2. If the event exists, we check if the user is an organizer
     if (event.organizer_id !== organizer_id) {
       return res
         .status(403)
         .json({ message: "Unauthorized to update this event." });
     }
-    // 3. if the event exists and the user is an organizer, the event is updated
-    const updatedEvent = await _updateEvent(Number(id), {
+    const updatedEvent = await _updateEvent(eventId, {
       title,
       description,
       category,
@@ -124,4 +144,9 @@ export const deleteEvent = async (req: Request, res: Response) => {
     console.error(error);
     res.status(500).json({ message: "Server error while deleting event." });
   }
+};
+
+// GET test
+export const test = async (req: Request, res: Response) => {
+  res.status(200).json({ message: "ok" });
 };

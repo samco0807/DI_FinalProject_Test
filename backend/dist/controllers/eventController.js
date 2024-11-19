@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteEvent = exports.updateEvent = exports.getEventById = exports.getAllEvents = exports.createEvent = void 0;
+exports.test = exports.deleteEvent = exports.updateEvent = exports.getEventById = exports.getAllEvents = exports.createEvent = void 0;
 const eventModel_1 = require("../models/eventModel");
 // POST /api/events
 const createEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -58,8 +58,15 @@ exports.getAllEvents = getAllEvents;
 // GET /api/events/:id
 const getEventById = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
+    const eventId = parseInt(id, 10);
+    // Validate the input
+    if (isNaN(eventId)) {
+        return res
+            .status(400)
+            .json({ message: "Invalid event ID. Must be a number." });
+    }
     try {
-        const event = yield (0, eventModel_1._getEventById)(Number(id));
+        const event = yield (0, eventModel_1._getEventById)(eventId);
         if (!event) {
             return res.status(404).json({ message: "Event not found." });
         }
@@ -75,22 +82,26 @@ exports.getEventById = getEventById;
 const updateEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const { id } = req.params;
+    const eventId = parseInt(id, 10);
     const { title, description, category, location, date, time } = req.body;
     const organizer_id = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+    // Validate the input
+    if (isNaN(eventId)) {
+        return res
+            .status(400)
+            .json({ message: "Invalid event ID. Must be a number." });
+    }
     try {
-        // 1.We check if the event exists with the event id
-        const event = yield (0, eventModel_1._getEventById)(Number(id));
+        const event = yield (0, eventModel_1._getEventById)(eventId);
         if (!event) {
             return res.status(404).json({ message: "Event not found." });
         }
-        // 2. If the event exists, we check if the user is an organizer
         if (event.organizer_id !== organizer_id) {
             return res
                 .status(403)
                 .json({ message: "Unauthorized to update this event." });
         }
-        // 3. if the event exists and the user is an organizer, the event is updated
-        const updatedEvent = yield (0, eventModel_1._updateEvent)(Number(id), {
+        const updatedEvent = yield (0, eventModel_1._updateEvent)(eventId, {
             title,
             description,
             category,
@@ -133,3 +144,8 @@ const deleteEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.deleteEvent = deleteEvent;
+// GET test
+const test = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.status(200).json({ message: "ok" });
+});
+exports.test = test;

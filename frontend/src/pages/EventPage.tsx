@@ -19,14 +19,16 @@ interface Event {
 
 export const EventPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const [events, setEvents] = useState<Event[]>([]);
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const response = await axios.get(`${process.env.API_URL}/events/${id}`);
+        const response = await axios.get(`${API_URL}/events`);
         setEvent(response.data);
       } catch (err: any) {
         setError(err.response?.data?.message || "Error retrieving event.");
@@ -44,89 +46,23 @@ export const EventPage: React.FC = () => {
 
   return (
     <div className="event-page-container">
-      <h2>{event.title}</h2>
-      <p>{event.description}</p>
-      <p>
-        <strong>Category :</strong> {event.category}
-      </p>
-      <p>
-        <strong>Location :</strong> {event.location}
-      </p>
-      <p>
-        <strong>Date :</strong> {event.date} at {event.time}
-      </p>
-      {/* Ajoutez des fonctionnalités supplémentaires comme l'inscription à l'événement */}
+      {events.map((event) => (
+        <div key={event.id} className="event">
+          <h2>{event.title}</h2>
+          <p>{event.description}</p>
+          <p>
+            <strong>Category :</strong> {event.category}
+          </p>
+          <p>
+            <strong>Location :</strong> {event.location}
+          </p>
+          <p>
+            <strong>Date :</strong> {event.date} at {event.time}
+          </p>
+          /* Ajoutez des fonctionnalités supplémentaires comme l'inscription à
+          l'événement */
+        </div>
+      ))}
     </div>
-  );
-};
-
-// Creation event form
-export const CreateEventPage: React.FC = () => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("");
-  const [location, setLocation] = useState("");
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
-  const [error, setError] = useState(null);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    try {
-      await axios.post(`${API_URL}/events`, {
-        title,
-        description,
-        category,
-        location,
-        date,
-        time,
-      });
-      alert("Event created successfully!");
-    } catch (err: any) {
-      console.error("Error creating event:", err);
-      setError(err.response?.data?.message || "Error creating event.");
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        required
-      />
-      <input
-        placeholder="Description"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        required
-      />
-      <input
-        type="text"
-        placeholder="Category"
-        value={category}
-        onChange={(e) => setCategory(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Location"
-        value={location}
-        onChange={(e) => setLocation(e.target.value)}
-      />
-      <input
-        type="date"
-        value={date}
-        onChange={(e) => setDate(e.target.value)}
-      />
-      <input
-        type="time"
-        value={time}
-        onChange={(e) => setTime(e.target.value)}
-      />
-      <button type="submit">Create Event</button>
-    </form>
   );
 };

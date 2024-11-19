@@ -6,6 +6,7 @@ import {
   getEventById,
   updateEvent,
   deleteEvent,
+  test,
 } from "../controllers/eventController";
 import { authenticateToken } from "../middleware/authMiddleware";
 
@@ -25,5 +26,8 @@ router.put("/:id", authenticateToken, updateEvent);
 
 // DELETE /api/events/:id (protected)
 router.delete("/:id", authenticateToken, deleteEvent);
+
+// Route to test where is the issue when we try to display the events in the browser
+router.get("/test", test)
 
 export default router;

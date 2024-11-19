@@ -18,4 +18,6 @@ router.post("/", authMiddleware_1.authenticateToken, eventController_1.createEve
 router.put("/:id", authMiddleware_1.authenticateToken, eventController_1.updateEvent);
 // DELETE /api/events/:id (protected)
 router.delete("/:id", authMiddleware_1.authenticateToken, eventController_1.deleteEvent);
+// Route to test where is the issue when we try to display the events in the browser
+router.get("/test", eventController_1.test);
 exports.default = router;

@@ -13,13 +13,12 @@ exports.test = exports.deleteEvent = exports.updateEvent = exports.getEventById 
 const eventModel_1 = require("../models/eventModel");
 // POST /api/events
 const createEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
     const { title, description, category, location, date, time } = req.body;
-    const organizer_id = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+    // const organizer_id = req.user?.id;
     // 1. we check if the organizer id exist so that the user can create the event
-    if (!organizer_id) {
-        return res.status(401).json({ message: "Unauthorized. No organizer ID" });
-    }
+    // if (!organizer_id) {
+    //   return res.status(401).json({ message: "Unauthorized. No organizer ID" });
+    // }
     // 2. We check if every field is filled
     if (!title || !description || !category || !location || !date || !time) {
         return res.status(400).json({ message: "All event fields are required." });
@@ -32,13 +31,14 @@ const createEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             location,
             date,
             time,
-            organizer_id,
+            // organizer_id,
         };
+        console.log("Request to creat event:", newEvent);
         const createdEvent = yield (0, eventModel_1._createEvent)(newEvent);
         res.status(201).json(createdEvent);
     }
     catch (error) {
-        console.error(error);
+        console.error("Server error while creating event:", error);
         res.status(500).json({ message: "Server error while creating event." });
     }
 });

@@ -7,24 +7,24 @@ import { Footer } from "./components/Layout/Footer";
 import { Navbar } from "./components//Layout/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { Home } from "./pages/HomePage";
-import { EventPage } from "./pages/EventPage";
+import { DisplayEventsPage } from "./pages/FetchEventsPage";
 import { CreateEventPage } from "./pages/EventCreationFormPage";
 import { RegisterPage } from "./pages/RegisterPage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
-export const App: React.FC = () => {
+const App: React.FC = () => {
   return (
     <Router>
       <Navbar />
-      <EventPage />
       <Routes>
-        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/create-event" element={<CreateEventPage />} />
-        <Route path="/events" element={<EventPage />} />
+        <Route path="/events" element={<DisplayEventsPage />} />
+        <Route path="/events/:id" element={<DisplayEventsPage />} />
         {/* Ajoutez d'autres routes selon les besoins */}
       </Routes>
       <Footer />
@@ -32,3 +32,5 @@ export const App: React.FC = () => {
     </Router>
   );
 };
+
+export default App

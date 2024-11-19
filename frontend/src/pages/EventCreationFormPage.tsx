@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { API_URL } from "../config";
+import { API_URL_EVENT } from "../config";
+
 import axios from "axios";
 
 // Creation event form
@@ -15,8 +17,9 @@ export const CreateEventPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
     try {
-      await axios.post(`${API_URL}/create-event`, {
+      await axios.post(`${API_URL}/events`, {
         title,
         description,
         category,
@@ -33,7 +36,7 @@ export const CreateEventPage: React.FC = () => {
 
   return (
 <>
-    <h2>Existing events</h2>
+    <h2>Creating event form</h2>
     <form onSubmit={handleSubmit}>
       <input
         type="text"

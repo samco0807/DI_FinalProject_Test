@@ -13,11 +13,11 @@ import { ok } from "assert";
 // POST /api/events
 export const createEvent = async (req: Request, res: Response) => {
   const { title, description, category, location, date, time } = req.body;
-  const organizer_id = req.user?.id;
+  // const organizer_id = req.user?.id;
   // 1. we check if the organizer id exist so that the user can create the event
-  if (!organizer_id) {
-    return res.status(401).json({ message: "Unauthorized. No organizer ID" });
-  }
+  // if (!organizer_id) {
+  //   return res.status(401).json({ message: "Unauthorized. No organizer ID" });
+  // }
   // 2. We check if every field is filled
   if (!title || !description || !category || !location || !date || !time) {
     return res.status(400).json({ message: "All event fields are required." });
@@ -30,14 +30,15 @@ export const createEvent = async (req: Request, res: Response) => {
       location,
       date,
       time,
-      organizer_id,
+      // organizer_id,
     };
+console.log("Request to creat event:",newEvent)
 
     const createdEvent = await _createEvent(newEvent);
 
     res.status(201).json(createdEvent);
   } catch (error) {
-    console.error(error);
+    console.error("Server error while creating event:", error);
     res.status(500).json({ message: "Server error while creating event." });
   }
 };

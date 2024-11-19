@@ -3,8 +3,15 @@ import { db } from "../db/knex";
 import { Event } from "../models/Event";
 
 export const _createEvent = async (event: Partial<Event>): Promise<Event> => {
-  const [newEvent] = await db<Event>("events").insert(event).returning("*");
-  return newEvent;
+  try {
+    console.log("Creating event wwith data", event);
+    const [newEvent] = await db<Event>("events").insert(event).returning("*");
+    console.log("Event created successfully", newEvent);
+    return newEvent;
+  } catch (error) {
+    console.error("Error creating event in the data base", error);
+    throw error
+  }
 };
 
 export const _getAllEvents = async (): Promise<Event[]> => {

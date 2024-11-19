@@ -19,13 +19,13 @@ router.get("/", getAllEvents);
 router.get("/:id", getEventById);
 
 // POST /api/events (protected)
-router.post("/", authenticateToken, createEvent);
+router.post("/create-event", createEvent);
 
 // PUT /api/events/:id (protected)
-router.put("/:id", authenticateToken, updateEvent);
+router.put("/:id", updateEvent);
 
 // DELETE /api/events/:id (protected)
-router.delete("/:id", authenticateToken, deleteEvent);
+router.delete("/:id", deleteEvent);
 
 // Route to test where is the issue when we try to display the events in the browser
 router.get("/test", test)

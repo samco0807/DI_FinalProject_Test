@@ -1,4 +1,4 @@
-// frontend/src/pages/EventPage.tsx
+// frontend/src/pages/FetchEventsPage.tsx
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { API_URL } from "../config";
@@ -17,32 +17,38 @@ interface Event {
   updated_at: string;
 }
 
-export const EventPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+export const DisplayEventsPage: React.FC = () => {
+  const { id } = useParams();
   const [events, setEvents] = useState<Event[]>([]);
-  const [event, setEvent] = useState<Event | null>(null);
+  // const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-
   useEffect(() => {
-    const fetchEvent = async () => {
+    const fetchEvents = async () => {
       try {
-        const response = await axios.get(`${API_URL}/events`);
-        setEvent(response.data);
+        let response;
+        if (id) {
+          const response = await axios.get(`${API_URL}/events/${id}`);
+          setEvents([response.data]);
+        } else {
+          response = await axios.get(`${API_URL}/events`);
+          setEvents(response.data);
+        }
       } catch (err: any) {
+        // console.log("object");
         setError(err.response?.data?.message || "Error retrieving event.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchEvent();
-  }, [id]);
+    fetchEvents();
+  }, []);
 
   if (loading) return <p>Downloading event...</p>;
   if (error) return <p className="error">{error}</p>;
-  if (!event) return <p>Event not found.</p>;
+  if (events.length === 0) return <p>Event not found.</p>;
 
   return (
     <div className="event-page-container">
